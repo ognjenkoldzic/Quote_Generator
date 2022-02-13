@@ -1,45 +1,64 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
+import axios from "axios";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [btnClicked, setBtnClicked] = useState(false);
+  const [advice, setAdvice] = useState("");
+  // axios.defaults.headers = {
+  //   "Cache-Control": "no-cache",
+  //   Pragma: "no-cache",
+  //   Expires: "0",
+  // };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const data = await fetch("https://api.adviceslip.com/advice");
+  //     const json = await data.json();
+  //     const adviceString = json.slip.advice;
+  //     setAdvice(adviceString);
+  //     console.log(adviceString);
+  //   };
+
+  //   fetchData().catch(console.error);
+  // }, []);
+
+  const getAdvices = async () => {
+    try {
+      const advices = await axios.get("https://api.adviceslip.com/advice");
+
+      setAdvice(advices.data.slip.advice);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    getAdvices();
+  }, []);
+  console.log(advice);
+
+  // function handleClick() {
+  //   // const fetchData = async () => {
+  //   //   const data = await fetch("https://api.adviceslip.com/advice");
+  //   //   const json = await data.json();
+  //   //   const adviceString = json.slip.advice;
+  //   //   setAdvice(adviceString);
+  //   //   //console.log(adviceString);
+  //   //   fetchData().catch(console.error);
+  //   };
+  //onClick={handleClick}
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+      <div className="card">
+        <h1 className="heading">{advice}</h1>
+        <button onClick={() => getAdvices()} className="button">
+          <span>GIVE ME ADVICE!</span>
+        </button>
+      </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
