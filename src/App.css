@@ -42,7 +42,7 @@ body {
 
 button {
   font-size: calc(10px + 2vmin);
-  margin: 30px;
+  margin: 10%;
 }
 @media only screen and (max-width: 600px) {
   .card {
